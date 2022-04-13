@@ -3,8 +3,8 @@ import Select from "react-select";
 import { useForm, Controller } from "react-hook-form";
 
 const defaultValues = {
-  input: "",
-  select: "",
+  title: "",
+  filter: "",
 };
 
 export default function App() {
@@ -28,9 +28,9 @@ export default function App() {
   }, []);
 
   function onSubmitSave(data) {
-    if (!data.input?.trim()) {
+    if (!data.title?.trim()) {
       setInputPlaceholder("Enter text and click Save")
-      setFocus("input");
+      setFocus("title");
       return;
     }
     setInputPlaceholder("");
@@ -39,11 +39,10 @@ export default function App() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("input")} placeholder={inputPlaceholder} />
+      <input {...register("title")} placeholder={inputPlaceholder} />
 
-      <MySelect name="select" control={control} options={options} placeholder="Select a filter..." />
+      <MySelect name="filter" control={control} options={options} placeholder="Select a filter..." />
 
-      <button type="button" onClick={() => reset({ defaultValues })}>Reset</button>
       <input type="submit" value="Save" onClick={handleSubmit(onSubmitSave)} />
     </form>
   );
