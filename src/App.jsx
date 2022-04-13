@@ -8,7 +8,7 @@ const defaultValues = {
 };
 
 export default function App() {
-  const { handleSubmit, reset, watch, control, register, setFocus } = useForm({ defaultValues });
+  const { handleSubmit, reset, watch, control, register, setFocus, formState } = useForm({ defaultValues });
   const onSubmit = data => console.log("submitted", data);
   const [inputPlaceholder, setInputPlaceholder] = useState("");
 
@@ -18,17 +18,23 @@ export default function App() {
   ]
 
   useEffect(()=>{
+    // focus first requred field initially
     handleSubmit(onSubmit)();
 
     const subscription = watch((data, { name, type }) => {
       // an input value has changed and it has a name - submit form
-      handleSubmit(onSubmit)();
+      if (formState.isValid) {
+        // no validation errors - submit
+        handleSubmit(onSubmit)();
+      }
     });
     return () => subscription.unsubscribe();
   }, []);
 
   function onSubmitSave(data) {
+    // title is not requred for submit, but for Save
     if (!data.title?.trim()) {
+      // title is missing - add placeholder text and set focus
       setInputPlaceholder("Enter text and click Save")
       setFocus("title");
       return;
